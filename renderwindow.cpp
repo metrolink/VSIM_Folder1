@@ -81,12 +81,12 @@ void RenderWindow::init()
     //NB: hardcoded path to files! You have to change this if you change directories for the project.
     //Qt makes a build-folder besides the project folder. That is why we go down one directory
     // (out of the build-folder) and then up into the project folder.
-    mShaderProgram[0] = new Shader("../GSOpenGL2019/plainvertex.vert", "../GSOpenGL2019/plainfragment.frag");
+    mShaderProgram[0] = new Shader("../VSIM_Folder1/plainvertex.vert", "../VSIM_Folder1/plainfragment.frag");
     qDebug() << "Plain shader program id: " << mShaderProgram[0]->getProgram();
-    mShaderProgram[1]= new Shader("../GSOpenGL2019/texturevertex.vert", "../GSOpenGL2019/texturefragmet.frag");
+    mShaderProgram[1]= new Shader("../VSIM_Folder1/texturevertex.vert", "../VSIM_Folder1/texturefragmet.frag");
     qDebug() << "Texture shader program id: " << mShaderProgram[1]->getProgram();
 
-    mShaderProgram[2] = new Shader("../GSOpenGL2019/NPCVertex.vert", "../GSOpenGL2019/NPCfragment.frag");
+    mShaderProgram[2] = new Shader("../VSIM_Folder1/NPCVertex.vert", "../VSIM_Folder1/NPCfragment.frag");
     qDebug() << "Plain shader program id: " << mShaderProgram[2]->getProgram();
 
     setupPlainShader(0);
@@ -94,7 +94,7 @@ void RenderWindow::init()
 
     //**********************  Texture stuff: **********************
     mTexture[0] = new Texture();
-    mTexture[1] = new Texture("../GSOpenGL2019/Assets/hund.bmp");
+    mTexture[1] = new Texture("../VSIM_Folder1/Assets/hund.bmp");
 
     //Set the textures loaded to a texture unit
     glActiveTexture(GL_TEXTURE0);
@@ -113,7 +113,7 @@ void RenderWindow::init()
 //    mVisualObjects.push_back(temp);
 
     //Oppgave 2:
-    mSurface = new TriangleSurface("../GSOpenGL2019/SecondTriangle.txt");
+    mSurface = new TriangleSurface("../VSIM_Folder1/SecondTriangle.txt");
     mSurface->init();
 
     mVisualObjects.push_back(mSurface);
@@ -122,8 +122,8 @@ void RenderWindow::init()
     mBall->init();
     mBall->mMatrix.scale(0.25);
     //mBall->mMatrix.rotateX(90);
-    //Her blir ballen sluppet fra 0.25 over bakken, ettersom radiusen er 0.25 så blir det 1.5 (1.25+.25)
-    mBall->mMatrix.setPosition(0.3,2.0,0.1);
+    //Her blir ballen sluppet fra 4m over bakken
+    mBall->mMatrix.setPosition(0.3,4.0,0.1);
     mBall->startPos = gsl::vec3{0.3,2.0,0.1};
     mBall->mAcceleration = gsl::vec3{0.0,-9.81,0};
     mVisualObjects.push_back(mBall);
@@ -131,7 +131,7 @@ void RenderWindow::init()
 
     //********************** Set up camera **********************
     mCurrentCamera = new Camera();
-    mCurrentCamera->setPosition(gsl::Vector3D(-1.f, -.5f, 2.f));
+    mCurrentCamera->setPosition(gsl::Vector3D(-1.f, -2.0f, 2.f));
 
     initTerrain();
 }
@@ -433,7 +433,6 @@ bool RenderWindow::readTerrainData(std::string file)
         unsigned int n{0};
         ifs >> n;
         mTerrainVertices.reserve(n);
-        std::cout << "inserted terrainvertices";
         for (unsigned int i{0}; i < n; ++i)
         {
             Vertex v;
@@ -443,13 +442,11 @@ bool RenderWindow::readTerrainData(std::string file)
 
         ifs >> n;
         mTerrainTriangles.reserve(n);
-        std::cout << "inserted triangles";
         for (unsigned int i{0}; i < n; ++i)
         {
             Triangle t;
             ifs >> t;
             mTerrainTriangles.push_back(t);
-            std::cout << t;
         }
 
         return true;
@@ -461,7 +458,7 @@ bool RenderWindow::readTerrainData(std::string file)
 
 void RenderWindow::initTerrain()
 {
-    readTerrainData("../GSOpenGL2019/SecondTriangle.txt");
+    readTerrainData("../VSIM_Folder1/SecondTriangle.txt");
 
 
     std::cout << "Triangle count: " << mTerrainTriangles.size() << std::endl;
